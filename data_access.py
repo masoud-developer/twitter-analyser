@@ -54,6 +54,11 @@ class StorageService:
         result = self.__sentiments.replace_one({'_id': sentiment['_id']}, sentiment)
         return 1
 
-    def updateAccount(self, account_name, summary) -> int:
-        result = self.__accounts.update_one({'username': account_name}, {'$set' : {'summary': summary}})
+    def updateAccount(self, account_name, summary=None, sentiment=None) -> int:
+        update = {}
+        if summary:
+            update['summary'] = summary
+        if sentiment:
+            update['sentiment'] = sentiment
+        result = self.__accounts.update_one({'username': account_name}, {'$set': update})
         return result.modified_count

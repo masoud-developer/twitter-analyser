@@ -160,7 +160,6 @@ class BackgroundWorker:
             tweets = storage.getTweets({}, {})
             accountTweets = [(k, list(g)) for k, g in itertools.groupby(tweets, lambda t: t['account'])]
             selfAccountTweets = [(acc, [t for t in tweets if t['authorName'] == acc]) for (acc, tweets) in accountTweets]
-
             for (account, selfTweets) in selfAccountTweets:
                 contentShouldBeSummarize = ''
                 for selfTweet in selfTweets:
@@ -168,7 +167,26 @@ class BackgroundWorker:
 
                 text_summarizer = TextSummarizer()
                 summary = text_summarizer.get_summary(contentShouldBeSummarize)
-                storage.updateAccount(account, summary)
+                storage.updateAccount(account, summary=summary)
+
+            for (account, tweet) in accountTweets:
+                sentiments = storage.getSentiments({'account': account}, None)
+                totalAccountTweets = sum([s['conversation']['total'] for s in sentiments])
+                positiveAccountTweets = sum([s['conversation']['positive'] for s in sentiments])
+                negativeAccountTweets = sum([s['conversation']['negative'] for s in sentiments])
+                neutralAccountTweets = sum([s['conversation']['neutral'] for s in sentiments])
+                negativeAccountTweetsPercent = self.__percentage(negativeAccountTweets, totalAccountTweets)
+                positiveAccountTweetsPercent = self.__percentage(positiveAccountTweets, totalAccountTweets)
+                neutralAccountTweetsPercent = self.__percentage(neutralAccountTweets, totalAccountTweets)
+                storage.updateAccount(account, sentiment={'totalAccountTweets': totalAccountTweets,
+                                                          'positiveAccountTweets': positiveAccountTweets,
+                                                          'negativeAccountTweets': negativeAccountTweets,
+                                                          'neutralAccountTweets': neutralAccountTweets,
+                                                          'negativeAccountTweetsPercent': negativeAccountTweetsPercent,
+                                                          'positiveAccountTweetsPercent': positiveAccountTweetsPercent,
+                                                          'neutralAccountTweetsPercent': neutralAccountTweetsPercent})
+
+
         except Exception as ex:
             print(ex)
 
