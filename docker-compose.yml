@@ -17,4 +17,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: app
+    restart: always
+    ports:
+      - "8099:8099"
 
