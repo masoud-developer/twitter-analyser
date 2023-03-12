@@ -5,7 +5,7 @@ from background_worker import BackgroundWorker
 import nltk
 
 
-if __name__ == '__main__' or True:
+if __name__ == '__main__':
     app = Flask(__name__)
     api = Api(app)
     routs = ['/accounts', '/tweets/<account>', '/audience/<account>', '/sentiment/<account>']
