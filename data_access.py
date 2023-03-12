@@ -3,7 +3,7 @@ from pymongo import MongoClient, UpdateOne
 
 class StorageService:
     def __init__(self):
-        self.__client = MongoClient('mongodb://root:qwe123asd@localhost:27017')
+        self.__client = MongoClient('mongodb://masoud:NNNqwe123asd321MMM@mongo:27017')
         self.__db = self.__client['twitter']
         self.__accounts = self.__db['accounts']
         self.__conversationThreads = self.__db['conversationThreads']

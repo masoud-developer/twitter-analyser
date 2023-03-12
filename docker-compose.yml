@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    container_name: mongo_twitter
+    image: mongo
+    restart: always
+    ports:
+      - "25876:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: masoud
+      MONGO_INITDB_ROOT_PASSWORD: NNNqwe123asd321MMM
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+
